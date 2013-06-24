@@ -40,7 +40,7 @@ $facebook = new Facebook(array(
  * InfoQ
  * */
 
-$posts = idx($facebook->api('/thenextweb/feed?limit=20'), 'data', array());6
+$posts = idx($facebook->api('/thenextweb/feed?limit=30'), 'data', array());6
 ?>
 
 
@@ -51,6 +51,7 @@ $posts = idx($facebook->api('/thenextweb/feed?limit=20'), 'data', array());6
   <meta http-equiv="Content-Type"
 content="text/html;charset=utf-8">
   <title>Smash Magazine</title>
+  <link rel="stylesheet" href="stylesheets/posts-screen.css" media="Screen" type="text/css" />
 </head>
 <body>
 
@@ -113,6 +114,7 @@ content="text/html;charset=utf-8">
           */
           
           $clean_message = str_remove_url($message);
+          $clean_description = str_remove_url($description);
           
           if ( $type != "status") {
           
@@ -134,7 +136,7 @@ content="text/html;charset=utf-8">
                   echo "message: " . $clean_message . "<br/>";
 
                 if (is_not_null($description))
-                  echo "description: " . $description . "<br/>";
+                  echo "description: " . $clean_description . "<br/>";
                 
               }
               
