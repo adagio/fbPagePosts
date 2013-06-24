@@ -1,9 +1,13 @@
 fbPagePosts
 ===========
 
-This app can already parse and show updates by any facebook page.
+- [ ] This app can already parse and show updates by any facebook page.
 
-We are learning about facebook (Graph) API.
+- We are learning about facebook (Graph) API.
 
-Next step is to merge updates from a list of pages.
+- [ ] Next step is to process updates and report stats.
+
+- [ ] Other step is to merge updates from a list of pages.
+
+
 
