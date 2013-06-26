@@ -40,7 +40,11 @@ $facebook = new Facebook(array(
  * InfoQ
  * */
 
-$posts = idx($facebook->api('/thenextweb/feed?limit=30'), 'data', array());6
+$thenextweb_posts = idx($facebook->api('/thenextweb/feed?limit=30'), 'data', array());
+$smashmag_posts = idx($facebook->api('/smashmag/feed?limit=30'), 'data', array());
+$posts = array_merge($thenextweb_posts, $smashmag_posts);;
+usort($posts, "cmp");
+
 ?>
 
 
@@ -98,6 +102,10 @@ content="text/html;charset=utf-8">
         // Extract the pieces of info we need from the requests above
           
           $id = idx($post, 'id');
+          
+          $from = idx($post, 'from');
+          $from_name = $from['name'];
+              
           $name = idx($post, 'name');
           $message = idx($post, 'message');
           $description = idx($post, 'description');
@@ -113,6 +121,18 @@ content="text/html;charset=utf-8">
           $icon = idx($post, 'icon');
           */
           
+          $likes = null;
+          $shares = null;
+          $shares_count = null;
+          
+          $likes = idx($post, 'likes');
+          $likes_count = $likes['count'];
+          
+          $shares = idx($post, 'shares');
+          
+          if ( is_not_null($shares) )
+            $shares_count = $shares['count'];
+          
           $clean_message = str_remove_url($message);
           $clean_description = str_remove_url($description);
           
@@ -124,19 +144,54 @@ content="text/html;charset=utf-8">
             <?php
               
               if ($type == "photo") {
-                echo "<span style=\"color: red\">[ O ]</span> <b>" . $clean_message . "</b><br/>";
+                
+                echo "id: $id | <span style=\"color: red\">[ O ]</span> <b>$clean_message</b><br/>";
+                
+                echo "From: $from_name";
+                
+                if ( is_not_null($likes) )
+                  echo " | Likes: $likes_count";
+                
+                if ( is_not_null($shares) ) {
+                 
+                  if ( is_not_null($likes) )
+                    echo " | ";
+
+                  echo "Shares: $shares_count";
+                  
+                }
+                echo "<br/>";
+                    
               } else {
               
-                if ( is_not_null($name)  )
-                  echo "<b>" . $name . "</b><br/>";
-                else
+                if ( is_not_null($name)  ) {
+                  
+                  echo "<b> $name</b><br/>";
+                  
+                  echo "From: $from_name";
+                  
+                  if ( is_not_null($likes) )
+                    echo " | Likes: $likes_count";
+                
+                  if ( is_not_null($shares_count) ) {
+
+                    if ( is_not_null($likes) )
+                      echo " | ";
+
+                    echo "Shares: $shares_count";
+                    
+                  }
+                  
+                  echo "<br/>";
+                  
+                } else
                   echo "<b>---</b><br/>";
 
                 if (is_not_null($message))
-                  echo "message: " . $clean_message . "<br/>";
+                  echo "message: $clean_message<br/>";
 
                 if (is_not_null($description))
-                  echo "description: " . $clean_description . "<br/>";
+                  echo "description: $clean_description<br/>";
                 
               }
               
