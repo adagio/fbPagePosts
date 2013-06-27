@@ -23,7 +23,7 @@ function str_remove_url($string) {
   return $string_with_no_url;
 }
 
-function cmp($a, $b)
+function posts_likes_count_cmp($a, $b)
 {
   
   if ( !isset($a['likes']) && !isset($b['likes']) ) {
